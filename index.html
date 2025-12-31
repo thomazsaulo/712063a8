@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a5f2a">
+    <meta name="description" content="Conferidor Mega da Virada 2025">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <title>Mega da Virada 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a5f2a 0%, #0d3d1a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .input-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .input-section h2 {
+            color: #1a5f2a;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .number-inputs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .number-inputs input {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #1a5f2a;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #1a5f2a;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .number-inputs input:focus {
+            background: #1a5f2a;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .btn-conferir {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1a5f2a;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-conferir:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn-conferir:active {
+            transform: translateY(0);
+        }
+
+        .bilhete {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bilhete-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .bilhete-title {
+            font-weight: bold;
+            color: #1a5f2a;
+            font-size: 1rem;
+        }
+
+        .bilhete-valor {
+            background: #1a5f2a;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .bilhete-acertos {
+            background: #ffd700;
+            color: #1a5f2a;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: none;
+        }
+
+        .bilhete-acertos.show {
+            display: inline-block;
+            animation: pulse 0.5s ease-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .jogo {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .jogo.destaque {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cc 100%);
+            border: 2px solid #ffd700;
+        }
+
+        .jogo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .jogo-letra {
+            font-weight: bold;
+            color: #1a5f2a;
+            font-size: 0.9rem;
+        }
+
+        .jogo-acertos {
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .jogo-acertos.tem-acerto {
+            color: #e67e00;
+        }
+
+        .numeros {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .numero {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            background: #e0e0e0;
+            color: #333;
+            transition: all 0.4s ease;
+        }
+
+        .numero.acertou {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+            color: #1a5f2a;
+            transform: scale(1.15);
+            box-shadow: 0 3px 10px rgba(255, 215, 0, 0.5);
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1.15); }
+            50% { transform: scale(1.3); }
+        }
+
+        .relatorio {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .relatorio.show {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .relatorio h2 {
+            color: #1a5f2a;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .ranking-item.top-3 {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cc 100%);
+            border-left: 4px solid #ffd700;
+        }
+
+        .ranking-posicao {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #1a5f2a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 0.9rem;
+        }
+
+        .ranking-item.top-3 .ranking-posicao {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+            color: #1a5f2a;
+        }
+
+        .ranking-info {
+            flex: 1;
+        }
+
+        .ranking-jogo {
+            font-weight: bold;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .ranking-numeros {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .ranking-pontos {
+            font-weight: bold;
+            color: #1a5f2a;
+            font-size: 1.1rem;
+        }
+
+        .resumo {
+            background: linear-gradient(135deg, #1a5f2a 0%, #0d3d1a 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .resumo h3 {
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .resumo-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.7;
+            margin-top: 30px;
+            font-size: 0.8rem;
+        }
+
+        /* Animação de carregamento dos bilhetes */
+        .bilhete:nth-child(1) { animation-delay: 0s; }
+        .bilhete:nth-child(2) { animation-delay: 0.1s; }
+        .bilhete:nth-child(3) { animation-delay: 0.2s; }
+        .bilhete:nth-child(4) { animation-delay: 0.3s; }
+        .bilhete:nth-child(5) { animation-delay: 0.4s; }
+        .bilhete:nth-child(6) { animation-delay: 0.5s; }
+        .bilhete:nth-child(7) { animation-delay: 0.6s; }
+        .bilhete:nth-child(8) { animation-delay: 0.7s; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Mega da Virada 2025</h1>
+        <p>Conferidor de Apostas</p>
+    </div>
+
+    <div class="input-section">
+        <h2>Digite os 6 números sorteados</h2>
+        <div class="number-inputs">
+            <input type="number" min="1" max="60" id="n1" placeholder="--">
+            <input type="number" min="1" max="60" id="n2" placeholder="--">
+            <input type="number" min="1" max="60" id="n3" placeholder="--">
+            <input type="number" min="1" max="60" id="n4" placeholder="--">
+            <input type="number" min="1" max="60" id="n5" placeholder="--">
+            <input type="number" min="1" max="60" id="n6" placeholder="--">
+        </div>
+        <button class="btn-conferir" onclick="conferir()">CONFERIR APOSTAS</button>
+    </div>
+
+    <div id="bilhetes-container"></div>
+
+    <div id="relatorio" class="relatorio"></div>
+
+    <div class="footer">
+        <p>Boa sorte! 🍀</p>
+    </div>
+
+    <script>
+        // Dados dos bilhetes extraídos
+        const bilhetes = [
+            {
+                nome: "Bilhete 1",
+                valor: "R$ 1.680,00",
+                jogos: [
+                    { letra: "A", numeros: [12, 15, 16, 32, 44, 45, 53, 60] },
+                    { letra: "B", numeros: [2, 11, 12, 16, 17, 25, 47, 60] },
+                    { letra: "C", numeros: [19, 27, 28, 38, 50, 51, 58, 59] },
+                    { letra: "D", numeros: [8, 10, 15, 30, 40, 44, 48, 56] },
+                    { letra: "E", numeros: [1, 4, 9, 21, 27, 47, 50, 54] },
+                    { letra: "F", numeros: [7, 9, 27, 30, 37, 38, 42, 60] },
+                    { letra: "G", numeros: [16, 26, 29, 30, 41, 49, 55, 56] },
+                    { letra: "H", numeros: [1, 10, 19, 38, 40, 49, 55, 59] },
+                    { letra: "I", numeros: [9, 21, 30, 31, 39, 43, 53, 57] },
+                    { letra: "J", numeros: [8, 15, 19, 34, 47, 49, 53, 54] }
+                ]
+            },
+            {
+                nome: "Bilhete 2",
+                valor: "R$ 1.680,00",
+                jogos: [
+                    { letra: "A", numeros: [6, 15, 19, 20, 24, 28, 43, 46] },
+                    { letra: "B", numeros: [4, 6, 19, 28, 42, 48, 51, 53] },
+                    { letra: "C", numeros: [6, 13, 19, 24, 33, 34, 47, 49] },
+                    { letra: "D", numeros: [7, 21, 33, 37, 38, 44, 54, 55] },
+                    { letra: "E", numeros: [20, 22, 32, 33, 38, 47, 54, 60] },
+                    { letra: "F", numeros: [12, 22, 23, 32, 38, 39, 46, 49] },
+                    { letra: "G", numeros: [2, 19, 29, 30, 35, 37, 42, 52] },
+                    { letra: "H", numeros: [2, 9, 14, 21, 27, 30, 38, 52] },
+                    { letra: "I", numeros: [12, 15, 23, 26, 32, 38, 43, 53] },
+                    { letra: "J", numeros: [15, 31, 32, 34, 37, 45, 56, 59] }
+                ]
+            },
+            {
+                nome: "Bilhete 3",
+                valor: "R$ 1.680,00",
+                jogos: [
+                    { letra: "A", numeros: [7, 18, 25, 42, 49, 51, 52, 55] },
+                    { letra: "B", numeros: [1, 4, 5, 6, 13, 26, 40, 47] },
+                    { letra: "C", numeros: [7, 20, 21, 26, 44, 49, 56, 59] },
+                    { letra: "D", numeros: [4, 8, 24, 34, 37, 42, 51, 52] },
+                    { letra: "E", numeros: [1, 4, 18, 19, 42, 52, 57, 58] },
+                    { letra: "F", numeros: [12, 15, 25, 28, 36, 39, 42, 45] },
+                    { letra: "G", numeros: [11, 14, 16, 35, 45, 46, 53, 57] },
+                    { letra: "H", numeros: [7, 9, 19, 27, 38, 49, 54, 58] },
+                    { letra: "I", numeros: [13, 16, 25, 27, 28, 34, 44, 54] },
+                    { letra: "J", numeros: [14, 20, 31, 33, 37, 39, 48, 54] }
+                ]
+            },
+            {
+                nome: "Bilhete 4",
+                valor: "R$ 504,00",
+                jogos: [
+                    { letra: "A", numeros: [6, 12, 22, 32, 37, 38, 39, 41] },
+                    { letra: "B", numeros: [5, 15, 21, 25, 40, 47, 55, 60] },
+                    { letra: "C", numeros: [8, 10, 15, 16, 37, 39, 41, 47] }
+                ]
+            },
+            {
+                nome: "Bilhete 5",
+                valor: "R$ 60,00",
+                jogos: [
+                    { letra: "A", numeros: [5, 9, 13, 37, 50, 51] },
+                    { letra: "B", numeros: [24, 29, 30, 35, 39, 53] },
+                    { letra: "C", numeros: [15, 19, 20, 44, 51, 52] },
+                    { letra: "D", numeros: [13, 22, 23, 42, 52, 53] },
+                    { letra: "E", numeros: [4, 5, 22, 30, 36, 45] },
+                    { letra: "F", numeros: [2, 11, 12, 27, 31, 50] },
+                    { letra: "G", numeros: [1, 5, 16, 32, 35, 46] },
+                    { letra: "H", numeros: [17, 20, 39, 48, 52, 56] },
+                    { letra: "I", numeros: [4, 12, 14, 22, 26, 44] },
+                    { letra: "J", numeros: [18, 20, 21, 37, 40, 51] }
+                ]
+            },
+            {
+                nome: "Bilhete 6",
+                valor: "R$ 60,00",
+                jogos: [
+                    { letra: "A", numeros: [13, 27, 32, 40, 55, 56] },
+                    { letra: "B", numeros: [14, 15, 21, 24, 32, 46] },
+                    { letra: "C", numeros: [8, 9, 26, 37, 42, 58] },
+                    { letra: "D", numeros: [6, 15, 21, 45, 59, 60] },
+                    { letra: "E", numeros: [13, 15, 24, 44, 54, 60] },
+                    { letra: "F", numeros: [2, 13, 21, 39, 44, 53] },
+                    { letra: "G", numeros: [3, 5, 27, 40, 43, 50] },
+                    { letra: "H", numeros: [19, 21, 27, 28, 35, 42] },
+                    { letra: "I", numeros: [3, 14, 24, 36, 40, 47] },
+                    { letra: "J", numeros: [16, 17, 31, 45, 56, 60] }
+                ]
+            },
+            {
+                nome: "Bilhete 7",
+                valor: "R$ 30,00",
+                jogos: [
+                    { letra: "A", numeros: [2, 8, 10, 13, 30, 36] },
+                    { letra: "B", numeros: [2, 15, 42, 44, 48, 53] },
+                    { letra: "C", numeros: [2, 5, 18, 37, 47, 53] },
+                    { letra: "D", numeros: [7, 8, 9, 33, 39, 44] },
+                    { letra: "E", numeros: [8, 11, 26, 27, 36, 46] }
+                ]
+            },
+            {
+                nome: "Bilhete 8",
+                valor: "R$ 6,00",
+                jogos: [
+                    { letra: "A", numeros: [3, 13, 37, 44, 46, 55] }
+                ]
+            },
+            {
+                nome: "Geisa",
+                valor: "-",
+                jogos: [
+                    { letra: "A", numeros: [5, 18, 21, 37, 53, 59] },
+                    { letra: "B", numeros: [5, 10, 17, 33, 39, 45] },
+                    { letra: "C", numeros: [6, 7, 10, 20, 23, 51] }
+                ]
+            },
+            {
+                nome: "Pai e Filhos",
+                valor: "-",
+                jogos: [
+                    { letra: "Luís Miguel", numeros: [2, 7, 8, 11, 49, 54] },
+                    { letra: "Ana Lívia", numeros: [5, 14, 22, 32, 41, 56] },
+                    { letra: "Thomaz Saulo", numeros: [1, 7, 9, 53, 54, 59] }
+                ]
+            }
+        ];
+
+        // Renderizar bilhetes na inicialização
+        function renderBilhetes(sorteados = []) {
+            const container = document.getElementById('bilhetes-container');
+            container.innerHTML = '';
+
+            bilhetes.forEach((bilhete, idx) => {
+                const bilheteEl = document.createElement('div');
+                bilheteEl.className = 'bilhete';
+                bilheteEl.style.animationDelay = `${idx * 0.1}s`;
+
+                let totalAcertosBilhete = 0;
+                let jogosHtml = '';
+
+                bilhete.jogos.forEach(jogo => {
+                    const acertos = jogo.numeros.filter(n => sorteados.includes(n));
+                    totalAcertosBilhete = Math.max(totalAcertosBilhete, acertos.length);
+
+                    const numerosHtml = jogo.numeros.map(n => {
+                        const acertou = sorteados.includes(n);
+                        return `<div class="numero ${acertou ? 'acertou' : ''}">${String(n).padStart(2, '0')}</div>`;
+                    }).join('');
+
+                    const acertosClass = acertos.length > 0 ? 'tem-acerto' : '';
+                    const jogoDestaque = acertos.length >= 4 ? 'destaque' : '';
+
+                    jogosHtml += `
+                        <div class="jogo ${jogoDestaque}">
+                            <div class="jogo-header">
+                                <span class="jogo-letra">Jogo ${jogo.letra}</span>
+                                <span class="jogo-acertos ${acertosClass}">${sorteados.length > 0 ? acertos.length + ' acerto(s)' : ''}</span>
+                            </div>
+                            <div class="numeros">${numerosHtml}</div>
+                        </div>
+                    `;
+                });
+
+                const acertosShow = sorteados.length > 0 ? 'show' : '';
+
+                bilheteEl.innerHTML = `
+                    <div class="bilhete-header">
+                        <span class="bilhete-title">${bilhete.nome}</span>
+                        <span class="bilhete-acertos ${acertosShow}">Max: ${totalAcertosBilhete} pts</span>
+                        <span class="bilhete-valor">${bilhete.valor}</span>
+                    </div>
+                    ${jogosHtml}
+                `;
+
+                container.appendChild(bilheteEl);
+            });
+        }
+
+        // Conferir apostas
+        function conferir() {
+            const sorteados = [];
+            for (let i = 1; i <= 6; i++) {
+                const val = parseInt(document.getElementById(`n${i}`).value);
+                if (val >= 1 && val <= 60) {
+                    sorteados.push(val);
+                }
+            }
+
+            if (sorteados.length !== 6) {
+                alert('Por favor, preencha todos os 6 números (de 1 a 60)');
+                return;
+            }
+
+            // Verificar duplicados
+            if (new Set(sorteados).size !== 6) {
+                alert('Os números não podem se repetir!');
+                return;
+            }
+
+            renderBilhetes(sorteados);
+            gerarRelatorio(sorteados);
+        }
+
+        // Gerar relatório
+        function gerarRelatorio(sorteados) {
+            const relatorio = document.getElementById('relatorio');
+            const todosJogos = [];
+
+            bilhetes.forEach(bilhete => {
+                bilhete.jogos.forEach(jogo => {
+                    const acertos = jogo.numeros.filter(n => sorteados.includes(n));
+                    todosJogos.push({
+                        bilhete: bilhete.nome,
+                        jogo: jogo.letra,
+                        numeros: jogo.numeros,
+                        acertos: acertos,
+                        qtdAcertos: acertos.length
+                    });
+                });
+            });
+
+            // Ordenar por quantidade de acertos
+            todosJogos.sort((a, b) => b.qtdAcertos - a.qtdAcertos);
+
+            // Estatísticas
+            const totalJogos = todosJogos.length;
+            const jogosComAcerto = todosJogos.filter(j => j.qtdAcertos > 0).length;
+            const maxAcertos = todosJogos[0]?.qtdAcertos || 0;
+            const jogosComMax = todosJogos.filter(j => j.qtdAcertos === maxAcertos).length;
+
+            // Contagem por quantidade de acertos
+            const contagem = {};
+            todosJogos.forEach(j => {
+                contagem[j.qtdAcertos] = (contagem[j.qtdAcertos] || 0) + 1;
+            });
+
+            let rankingHtml = '';
+            todosJogos.slice(0, 20).forEach((jogo, idx) => {
+                const isTop3 = idx < 3 && jogo.qtdAcertos > 0;
+                const acertosStr = jogo.acertos.map(n => String(n).padStart(2, '0')).join(', ');
+
+                rankingHtml += `
+                    <div class="ranking-item ${isTop3 ? 'top-3' : ''}">
+                        <div class="ranking-posicao">${idx + 1}</div>
+                        <div class="ranking-info">
+                            <div class="ranking-jogo">${jogo.bilhete} - Jogo ${jogo.jogo}</div>
+                            <div class="ranking-numeros">Acertou: ${acertosStr || 'Nenhum'}</div>
+                        </div>
+                        <div class="ranking-pontos">${jogo.qtdAcertos} pts</div>
+                    </div>
+                `;
+            });
+
+            relatorio.innerHTML = `
+                <h2>Relatório de Resultados</h2>
+                <div class="resumo">
+                    <h3>Números Sorteados: ${sorteados.map(n => String(n).padStart(2, '0')).join(' - ')}</h3>
+                    <div class="resumo-stats">
+                        <div class="stat">
+                            <div class="stat-value">${totalJogos}</div>
+                            <div class="stat-label">Total de Jogos</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${jogosComAcerto}</div>
+                            <div class="stat-label">Jogos com Acerto</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${maxAcertos}</div>
+                            <div class="stat-label">Máximo de Acertos</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${jogosComMax}</div>
+                            <div class="stat-label">Jogos com ${maxAcertos} pts</div>
+                        </div>
+                    </div>
+                </div>
+                <h3 style="margin-bottom: 15px; color: #1a5f2a;">Top 20 Jogos</h3>
+                ${rankingHtml}
+            `;
+
+            relatorio.classList.add('show');
+            relatorio.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Auto-avançar para próximo input
+        document.querySelectorAll('.number-inputs input').forEach((input, idx, inputs) => {
+            input.addEventListener('input', function() {
+                if (this.value.length >= 2 && idx < inputs.length - 1) {
+                    inputs[idx + 1].focus();
+                }
+                if (parseInt(this.value) > 60) this.value = 60;
+                if (parseInt(this.value) < 1 && this.value !== '') this.value = 1;
+            });
+        });
+
+        // Inicializar
+        renderBilhetes();
+
+        // Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
